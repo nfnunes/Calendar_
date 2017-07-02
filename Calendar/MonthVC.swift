@@ -9,7 +9,7 @@
 import UIKit
 import JTAppleCalendar
 
-class ViewController: UIViewController {
+class MonthVC: UIViewController {
     @IBOutlet weak var calendarView: JTAppleCalendarView!
     @IBOutlet weak var year: UILabel!
     @IBOutlet weak var month: UILabel!
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
 
 }
 
-extension ViewController: JTAppleCalendarViewDataSource{
+extension MonthVC: JTAppleCalendarViewDataSource{
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         
         formatter.dateFormat = "yyyy MM dd"
@@ -99,7 +99,7 @@ extension ViewController: JTAppleCalendarViewDataSource{
 }
 
 
-extension ViewController: JTAppleCalendarViewDelegate{
+extension MonthVC: JTAppleCalendarViewDelegate{
     
     //Display the cell
     func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {

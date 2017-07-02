@@ -1,0 +1,15 @@
+PODS:
+  - JTAppleCalendar (7.0.4)
+  - SpreadsheetView (0.7.2)
+
+DEPENDENCIES:
+  - JTAppleCalendar (~> 7.0)
+  - SpreadsheetView (~> 0.7)
+
+SPEC CHECKSUMS:
+  JTAppleCalendar: 6def48ecd0daae1d5baaa45e813124c2a20b184d
+  SpreadsheetView: 84accc93f46aab9ecd95e08e384e6ab073ffb14b
+
+PODFILE CHECKSUM: 0948119c67371e6c1138404e67b97aa7bb1e1129
+
+COCOAPODS: 1.1.1

@@ -82,7 +82,7 @@ class TimeCell: Cell {
     
     override var frame: CGRect {
         didSet {
-            label.frame = bounds.insetBy(dx: 6, dy: 0)
+            label.frame = bounds.insetBy(dx: 4, dy: 0)
         }
     }
     

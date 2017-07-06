@@ -24,21 +24,27 @@ class WeekVC: UIViewController, SpreadsheetViewDataSource, SpreadsheetViewDelega
     let currentDateSelectedViewColor = UIColor(colorWithHexValue: 0x4e3f5d)
     
     let formatter = DateFormatter()
-    
-    let hours = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" ]
-    
+    let days = ["MON", "TUE", "WED", "THUY", "FRI", "SAT", "SUN"]
+    let dayColors = [UIColor(red: 0.918, green: 0.224, blue: 0.153, alpha: 1),
+                     UIColor(red: 0.106, green: 0.541, blue: 0.827, alpha: 1),
+                     UIColor(red: 0.200, green: 0.620, blue: 0.565, alpha: 1),
+                     UIColor(red: 0.953, green: 0.498, blue: 0.098, alpha: 1),
+                     UIColor(red: 0.400, green: 0.584, blue: 0.141, alpha: 1),
+                     UIColor(red: 0.835, green: 0.655, blue: 0.051, alpha: 1),
+                     UIColor(red: 0.153, green: 0.569, blue: 0.835, alpha: 1)]
+    let hours = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+                 "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
     let evenRowColor = UIColor(red: 0.914, green: 0.914, blue: 0.906, alpha: 1)
-    
-    let weekEvents = [
-        ["", "", "Take medicine", "", "", "", "", "", "", "", "", "", "", "Movie with family", "", "", "", "", "", "", "", "", "", ""],
-        ["Leave for cabin", "", "", "", "", "Lunch with Tim", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "Downtown parade", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "Fireworks show", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "Family BBQ", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "Return home", "", "", "", "", "", "", "", "", "", ""]
+    let oddRowColor: UIColor = .white
+    let data = [
+        ["", "", "Take medicine", "", "", "", "", "", "", "", "", "", "", "Movie with family", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["Leave for cabin", "", "", "", "", "Lunch with Tim", "", "", "", "", "", "", "", "", "", "", "", "", "", "",  "", "", "", "", "", "",],
+        ["", "", "", "", "Downtown parade", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "Fireworks show", "", "", "",  "", "", "", "", "", ""],
+        ["", "", "", "", "", "Family BBQ", "", "", "", "", "", "", "", "", "", "", "", "", "", "",  "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",  "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "Return home", "", "", "", "", "", "",  "", "", "", "", "", ""]
     ]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -53,6 +59,7 @@ class WeekVC: UIViewController, SpreadsheetViewDataSource, SpreadsheetViewDelega
         weekSchedule.gridStyle = .none
         
         weekSchedule.register(TimeCell.self, forCellWithReuseIdentifier: String(describing: TimeCell.self))
+        weekSchedule.register(DayTitleCell.self, forCellWithReuseIdentifier: String(describing: DayTitleCell.self))
         weekSchedule.register(ScheduleCell.self, forCellWithReuseIdentifier: String(describing: ScheduleCell.self))
 
     }
@@ -114,54 +121,74 @@ class WeekVC: UIViewController, SpreadsheetViewDataSource, SpreadsheetViewDelega
     }
     
     func numberOfColumns(in spreadsheetView: SpreadsheetView) -> Int {
-        return 8
+        return 1 + days.count
     }
     
     func numberOfRows(in spreadsheetView: SpreadsheetView) -> Int {
-        return 24
+        return 1 + hours.count
     }
-    
-    func spreadsheetView(_ spreadsheetView: SpreadsheetView, widthForColumn column: Int) -> CGFloat {
+    /*func spreadsheetView(_ spreadsheetView: SpreadsheetView, widthForColumn column: Int) -> CGFloat {
         
         let timeCellWidth = weekSchedule.bounds.size.width / 8
         return timeCellWidth
+    }*/
+    
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, widthForColumn column: Int) -> CGFloat {
+        
+        let cellWidth = weekSchedule.bounds.size.width / 9
+        
+        if case 0 = column {
+            return cellWidth
+        } else {
+            return cellWidth
+        }
     }
     
     func spreadsheetView(_ spreadsheetView: SpreadsheetView, heightForRow row: Int) -> CGFloat {
-        return 50
+        if case 0 = row {
+            return 24
+        } else {
+            return 35
+        }
+    }
+    
+    func frozenColumns(in spreadsheetView: SpreadsheetView) -> Int {
+        return 1
+    }
+    
+    func frozenRows(in spreadsheetView: SpreadsheetView) -> Int {
+        return 1
     }
     
     func spreadsheetView(_ spreadsheetView: SpreadsheetView, cellForItemAt indexPath: IndexPath) -> Cell? {
-        
-        if case (0, 0...(hours.count)) = (indexPath.column, indexPath.row) {
-            let cell = spreadsheetView.dequeueReusableCell(withReuseIdentifier: String(describing: TimeCell.self), for: indexPath) as! TimeCell
-            cell.label.text = hours[indexPath.row]
- //           cell.backgroundColor = indexPath.row % 2 == 0 ? evenRowColor : oddRowColor
+        if case (1...(days.count + 1), 0) = (indexPath.column, indexPath.row) {
+            let cell = spreadsheetView.dequeueReusableCell(withReuseIdentifier: String(describing: DayTitleCell.self), for: indexPath) as! DayTitleCell
+            cell.label.text = days[indexPath.column - 1]
+            cell.label.textColor = dayColors[indexPath.column - 1]
             return cell
-        }
-        
-        
-        else if case (1...8, 0...(hours.count)) = (indexPath.column, indexPath.row) {
+        }  else if case (0, 1...(hours.count + 1)) = (indexPath.column, indexPath.row) {
+            let cell = spreadsheetView.dequeueReusableCell(withReuseIdentifier: String(describing: TimeCell.self), for: indexPath) as! TimeCell
+            cell.label.text = hours[indexPath.row - 1]
+            cell.backgroundColor = indexPath.row % 2 == 0 ? evenRowColor : oddRowColor
+            return cell
+        } else if case (1...(days.count + 1), 2...(hours.count + 2)) = (indexPath.column, indexPath.row) {
             let cell = spreadsheetView.dequeueReusableCell(withReuseIdentifier: String(describing: ScheduleCell.self), for: indexPath) as! ScheduleCell
-            let text = weekEvents[indexPath.column - 1][indexPath.row]
+            let text = data[indexPath.column - 1][indexPath.row - 1]
             if !text.isEmpty {
                 cell.label.text = text
-                //let color = dayColors[indexPath.column - 1]
-                //cell.label.textColor = color
-               // cell.color = color.withAlphaComponent(0.2)
-                //cell.borders.top = .solid(width: 2, color: color)
-               // cell.borders.bottom = .solid(width: 2, color: color)
-                
-            }
-           else {
-               // cell.color = indexPath.row % 2 == 0 ? evenRowColor : oddRowColor
+                let color = dayColors[indexPath.column - 1]
+                cell.label.textColor = color
+                cell.color = color.withAlphaComponent(0.2)
+                cell.borders.top = .solid(width: 2, color: color)
+                cell.borders.bottom = .solid(width: 2, color: color)
+            } else {
+                cell.label.text = nil
+                cell.color = indexPath.row % 2 == 0 ? evenRowColor : oddRowColor
                 cell.borders.top = .none
                 cell.borders.bottom = .none
-                
             }
-        return cell
+            return cell
         }
-  
         return nil
     }
 }
@@ -176,7 +203,7 @@ extension WeekVC: JTAppleCalendarViewDataSource{
         let startDate = formatter.date(from: "2017 01 01")! //not use force in final app!
         let endDate = formatter.date(from: "2017 12 31")! //not use force in final app!
         
-        let parameters = ConfigurationParameters(startDate: startDate, endDate: endDate, numberOfRows: 1)
+        let parameters = ConfigurationParameters(startDate: startDate, endDate: endDate, numberOfRows: 1, firstDayOfWeek: DaysOfWeek(rawValue: 2))
         return parameters
     }
     

@@ -36,7 +36,7 @@ class DayTitleCell: Cell {
         
         label.frame = bounds
         label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         label.textAlignment = .center
         
         contentView.addSubview(label)
@@ -74,7 +74,7 @@ class TimeCell: Cell {
         
         label.frame = bounds
         label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        label.font = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: UIFontWeightMedium)
+        label.font = UIFont.monospacedDigitSystemFont(ofSize: 10, weight: UIFontWeightMedium)
         label.textAlignment = .right
         
         contentView.addSubview(label)
@@ -82,7 +82,7 @@ class TimeCell: Cell {
     
     override var frame: CGRect {
         didSet {
-            label.frame = bounds.insetBy(dx: 4, dy: 0)
+            label.frame = bounds.insetBy(dx: 2, dy: 0)
         }
     }
     
@@ -101,7 +101,7 @@ class ScheduleCell: Cell {
     
     override var frame: CGRect {
         didSet {
-            label.frame = bounds.insetBy(dx: 4, dy: 0)
+            label.frame = bounds.insetBy(dx: 2, dy: 0)
         }
     }
     
@@ -112,8 +112,9 @@ class ScheduleCell: Cell {
         
         label.frame = bounds
         label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.boldSystemFont(ofSize: 10)
         label.textAlignment = .left
+        label.numberOfLines = 0
         
         contentView.addSubview(label)
     }
